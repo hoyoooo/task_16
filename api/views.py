@@ -4,12 +4,14 @@ from rest_framework.generics import (
     RetrieveAPIView,
     RetrieveUpdateAPIView,
     DestroyAPIView,
+    CreateAPIView,
 )
 from .serializers import (
     RestaurantListSerializer,
     RestaurantDetailSerializer,
     RestaurantCreateUpdateSerializer,
 )
+from django.contrib.auth.models import User
 
 class RestaurantListView(ListAPIView):
     queryset = Restaurant.objects.all()
@@ -24,8 +26,10 @@ class RestaurantDetailView(RetrieveAPIView):
 
 
 # Complete Me
-class RestaurantCreateView():
-
+class RestaurantCreateView(CreateAPIView):
+    serializer_class = RestaurantListSerializer
+    def perform_create(self, serializer):
+        serializer.save(owner =User.objects.all().first())
 
 class RestaurantUpdateView(RetrieveUpdateAPIView):
     queryset = Restaurant.objects.all()
